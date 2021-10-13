@@ -8,7 +8,7 @@ import {MessageService} from "./message.service";
   providedIn: 'root'
 })
 export class HeroService {
-
+  topHeroes: Hero[] = [];
   constructor(private messageService: MessageService) {
   }
 
@@ -18,4 +18,15 @@ export class HeroService {
     return heroes;
   }
 
+  getTopOfHeroes(): Hero[] {
+    this.getHeroes().subscribe(heroes => this.topHeroes = heroes.slice(1, 5));
+    this.messageService.add('HeroService: fetched TOP of heroes');
+    return this.topHeroes;
+  }
+
+  getHeroById(id: number): Observable<Hero>{
+    const hero = HEROES.find(h=>h.id === id)!;
+    this.messageService.add(`HeroService: fetched hero id: ${hero.id}`);
+    return of(hero);
+  }
 }
